@@ -1,7 +1,18 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: "This is just a sample template"
+
 Resources:
-  NullResource:
-    Type: "Custom::NullResource"
-    Condition: HasNot
+  TestTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Test
+      AttributeDefinitions:
+        - AttributeName: testKey
+          AttributeType: S
+      KeySchema:
+        - AttributeName: testKey
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 1
