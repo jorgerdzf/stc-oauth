@@ -116,8 +116,8 @@ Resources:
         - AttributeName: Token
           KeyType: HASH
       TimeToLiveSpecification:
-        - AttributeName: ExpirationTime
-          Enabled: true
+        AttributeName: ExpirationTime
+        Enabled: true
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
