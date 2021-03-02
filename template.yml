@@ -10,11 +10,9 @@ Parameters:
     AllowedValues:
       - dev
       - qa
-      - qa2
       - staging
-      - demo
       - prod
-    ConstraintDescription: must be a dev, test, qa, demo or prod
+    ConstraintDescription: must be a dev, qa, staging or prod
   STCAuthBucket:
     Description: Location of all the necessary stack file resources
     Type: String
@@ -39,7 +37,7 @@ Resources:
         "Fn::Transform":
           Name: "AWS::Include"
           Parameters:
-            Location: !Sub s3://${STCAuthBucket}/${ApiSpecFile}
+            Location: s3://stc-oauth-dev-artifacts/openapi.yml
       MethodSettings:
         - ResourcePath: "/*"
           HttpMethod: "*"

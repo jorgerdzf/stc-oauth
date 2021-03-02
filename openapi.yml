@@ -1,0 +1,5 @@
+openapi: 3.0.0
+info:
+  title: STC Consumer Authentication API
+  description: STChealth authentication API for consumers
+  version: 0.0.2
