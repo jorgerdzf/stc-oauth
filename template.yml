@@ -20,7 +20,7 @@ Parameters:
   ApiSpecFile:
     Description: Name of the api documentation spec file
     Type: String
-    Default: openapi.yml
+    Default: s3://stc-oauth-dev-artifacts/openapi.yml
 
 Resources:
   Api:
@@ -37,13 +37,7 @@ Resources:
         "Fn::Transform":
           Name: "AWS::Include"
           Parameters:
-            Location:
-              - !Join
-                - ""
-                - - "s3://"
-                  - !Ref STCAuthBucket
-                  - "/"
-                  - !Ref ApiSpecFile
+            Location: !Ref ApiSpecFile
       MethodSettings:
         - ResourcePath: "/*"
           HttpMethod: "*"
