@@ -18,6 +18,7 @@ Parameters:
   STCAuthBucket:
     Description: Location of all the necessary stack file resources
     Type: String
+    Default: stc-oauth-dev-artifacts
   ApiSpecFile:
     Description: Name of the api documentation spec file
     Type: String
