@@ -100,17 +100,7 @@ Resources:
     Properties:
       TableName: Token
       AttributeDefinitions:
-        - AttributeName: ClientId
-          AttributeType: S
-        - AttributeName: Scope
-          AttributeType: S
-        - AttributeName: TokenType
-          AttributeType: S
         - AttributeName: Token
-          AttributeType: S
-        - AttributeName: ExpirationTime
-          AttributeType: N
-        - AttributeName: Timestamp
           AttributeType: S
       KeySchema:
         - AttributeName: Token
