@@ -37,7 +37,13 @@ Resources:
         "Fn::Transform":
           Name: "AWS::Include"
           Parameters:
-            Location: s3://stc-oauth-dev-artifacts/openapi.yml
+            Location:
+              - !Join
+                - ""
+                - - "s3://"
+                  - !Ref STCAuthBucket
+                  - "/"
+                  - !Ref ApiSpecFile
       MethodSettings:
         - ResourcePath: "/*"
           HttpMethod: "*"
