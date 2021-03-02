@@ -1,18 +1,152 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: "This is just a sample template"
+Description: "STC oAuth Server Template Format"
+
+Parameters:
+  EnvironmentType:
+    Description: The environment type
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - qa2
+      - staging
+      - demo
+      - prod
+    ConstraintDescription: must be a dev, test, qa, demo or prod
+  STCAuthBucket:
+    Description: Location of all the necessary stack file resources
+    Type: String
+  ApiSpecFile:
+    Description: Name of the api documentation spec file
+    Type: String
+    Default: openapi.yml
 
 Resources:
-  TestTable:
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "stc-oAuth-api-${EnvironmentType}"
+      Description: "Authorization API for STC Partners"
+      Cors: "'*'"
+      TracingEnabled: true       
+      EndpointConfiguration:
+        Type: "REGIONAL"
+      StageName: !Ref EnvironmentType
+      DefinitionBody:
+        "Fn::Transform":
+          Name: "AWS::Include"
+          Parameters:
+            Location: !Sub s3://${STCAuthBucket}/${ApiSpecFile}
+      MethodSettings:
+        - CacheDataEncrypted: false
+          CachingEnabled: false
+          LoggingLevel: INFO
+          MetricsEnabled: true
+  TestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambda/stc-oauth/test/get
+      Handler: index.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Layers:
+        - Ref: SharedNodeJSLambdaLayer
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /test
+            Method: get
+            RestApiId:
+              Ref: Api
+            Auth:
+              Authorizer: NONE
+  AuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambda/stc-oauth/auth/get
+      Handler: index.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Layers:
+        - Ref: SharedNodeJSLambdaLayer
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /auth
+            Method: get
+            RestApiId:
+              Ref: Api
+            Auth:
+              Authorizer: NONE
+  TokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambda/stc-oauth/token/get
+      Handler: index.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBReadOnlyAccess
+      Layers:
+        - Ref: SharedNodeJSLambdaLayer
+      Events:
+        GetUserByCognitoID:
+          Type: Api
+          Properties:
+            Path: /token
+            Method: get
+            RestApiId:
+              Ref: Api
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambda/profile/post-confirmation
+      Handler: index.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBFullAccess
+      Layers:
+        - Ref: SharedNodeJSLambdaLayer
+      Events:
+        CognitoPostConfirmation:
+          Type: Cognito
+          Properties:
+            UserPool:
+              Ref: DevUserPool
+            Trigger: PostConfirmation
+  SharedNodeJSLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: SharedNodeJSLayer
+      Description: Layer containing shared dependencies
+      ContentUri: dependencies/
+      CompatibleRuntimes:
+        - nodejs10.x
+        - nodejs12.x
+      RetentionPolicy: Retain
+  TokenTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: Test
+      TableName: Token
       AttributeDefinitions:
-        - AttributeName: testKey
+        - AttributeName: ClientId
+          AttributeType: S
+        - AttributeName: Scope
+          AttributeType: S
+        - AttributeName: TokenType
+          AttributeType: S
+        - AttributeName: Token
+          AttributeType: S
+        - AttributeName: ExpirationTime
+          AttributeType: N
+        - AttributeName: Timestamp
           AttributeType: S
       KeySchema:
-        - AttributeName: testKey
+        - AttributeName: Token
           KeyType: HASH
+      TimeToLiveSpecification:
+        - AttributeName: ExpirationTime
+          Enabled: true
       ProvisionedThroughput:
-        ReadCapacityUnits: 2
+        ReadCapacityUnits: 1
         WriteCapacityUnits: 1
