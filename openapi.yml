@@ -28,7 +28,7 @@ paths:
           "500":
             statusCode: "500"
         passthroughBehavior: "when_no_match"
-        httpMethod: "GET"
+        httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
         type: "aws_proxy"
   /token:
@@ -90,7 +90,7 @@ paths:
           "500":
             statusCode: "500"
         passthroughBehavior: "when_no_match"
-        httpMethod: "GET"
+        httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
         type: "aws_proxy"
   /auth:
@@ -159,7 +159,7 @@ paths:
           "500":
             statusCode: "500"
         passthroughBehavior: "when_no_match"
-        httpMethod: "GET"
+        httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
         type: "aws_proxy"
 components:
