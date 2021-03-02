@@ -30,7 +30,7 @@ Resources:
       Name: !Sub "stc-oAuth-api-${EnvironmentType}"
       Description: "Authorization API for STC Partners"
       Cors: "'*'"
-      TracingEnabled: true       
+      TracingEnabled: true
       EndpointConfiguration:
         Type: "REGIONAL"
       StageName: !Ref EnvironmentType
@@ -40,8 +40,11 @@ Resources:
           Parameters:
             Location: !Sub s3://${STCAuthBucket}/${ApiSpecFile}
       MethodSettings:
-        - CacheDataEncrypted: false
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          CacheDataEncrypted: false
           CachingEnabled: false
+          DataTraceEnabled: true
           LoggingLevel: INFO
           MetricsEnabled: true
   TestFunction:
@@ -50,9 +53,6 @@ Resources:
       CodeUri: src/lambda/stc-oauth/test/get
       Handler: index.handler
       Runtime: nodejs12.x
-      Policies: AmazonDynamoDBReadOnlyAccess
-      Layers:
-        - Ref: SharedNodeJSLambdaLayer
       Events:
         Test:
           Type: Api
@@ -69,9 +69,6 @@ Resources:
       CodeUri: src/lambda/stc-oauth/auth/get
       Handler: index.handler
       Runtime: nodejs12.x
-      Policies: AmazonDynamoDBReadOnlyAccess
-      Layers:
-        - Ref: SharedNodeJSLambdaLayer
       Events:
         Test:
           Type: Api
@@ -89,8 +86,6 @@ Resources:
       Handler: index.handler
       Runtime: nodejs12.x
       Policies: AmazonDynamoDBReadOnlyAccess
-      Layers:
-        - Ref: SharedNodeJSLambdaLayer
       Events:
         GetUserByCognitoID:
           Type: Api
@@ -99,31 +94,8 @@ Resources:
             Method: get
             RestApiId:
               Ref: Api
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/lambda/profile/post-confirmation
-      Handler: index.handler
-      Runtime: nodejs12.x
-      Policies: AmazonDynamoDBFullAccess
-      Layers:
-        - Ref: SharedNodeJSLambdaLayer
-      Events:
-        CognitoPostConfirmation:
-          Type: Cognito
-          Properties:
-            UserPool:
-              Ref: DevUserPool
-            Trigger: PostConfirmation
-  SharedNodeJSLambdaLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: SharedNodeJSLayer
-      Description: Layer containing shared dependencies
-      ContentUri: dependencies/
-      CompatibleRuntimes:
-        - nodejs10.x
-        - nodejs12.x
-      RetentionPolicy: Retain
+            Auth:
+              Authorizer: NONE
   TokenTable:
     Type: AWS::DynamoDB::Table
     Properties:
