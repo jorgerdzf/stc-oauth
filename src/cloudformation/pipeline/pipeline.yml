@@ -148,7 +148,7 @@ Resources:
                 Owner: AWS
                 Provider: CodeStarSourceConnection
                 Version: 1
-              Region: us-east-1
+              Region: us-west-2
               OutputArtifacts:
                 - Name: SourceArtifact
               Configuration:
