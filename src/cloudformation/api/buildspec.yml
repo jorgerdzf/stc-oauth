@@ -7,7 +7,7 @@ phases:
     commands:
       # - chmod +x bash_npm_install.sh
       # - ./bash_npm_install.sh
-      - aws cloudformation package --template-file ../api/template.yml --s3-bucket $S3STCAuthBucket --output-template-file packaged-template.yml
+      - aws cloudformation package --template-file template.yml --s3-bucket $S3STCAuthBucket --output-template-file packaged-template.yml
       - aws s3 cp ../../spec/openapi.yml "s3://$S3STCAuthBucket"
 artifacts:
   files:
