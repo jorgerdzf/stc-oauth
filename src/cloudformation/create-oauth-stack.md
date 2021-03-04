@@ -15,10 +15,10 @@ The PIPELINE_CONNECTION_ARN is the arn of the connection you just created.
 | Parameter               | Description                                                                     | Example                                                                                             |
 | ----------------------- | :------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
 | AWS_CLI_PROFILE         | AWS IAM user with enough permissions to create the resources                    | tiempo-erick                                                                                        |
-| ROLE_TRUST_POLICY_FILE  | Trust policy to allow cloudformation to assume the required role                | file://../pipeline/policies/stc-oauth-cloudformation-trust-policy.json                              |
-| ROLE_POLICY_FILE        | Location of the trust policy file                                               | file://../pipeline/policies/stc-oauth-cloudformation-policy.json                                    |
-| API_STACK_TEMPLATE      | Location of the cloudformation template for the oAuth API                       | file://initial-template.yml                                                                         |
-| PIPELINE_STACK_TEMPLATE | Location of the cloudformation template for the oAuth pipeline                  | file://../pipeline/pipeline.yml                                                                     |
+| ROLE_TRUST_POLICY_FILE  | Trust policy to allow cloudformation to assume the required role                | file://./pipeline/policies/stc-oauth-cloudformation-trust-policy.json                               |
+| ROLE_POLICY_FILE        | Location of the trust policy file                                               | file://./pipeline/policies/stc-oauth-cloudformation-policy.json                                     |
+| API_STACK_TEMPLATE      | Location of the cloudformation template for the oAuth API                       | file://./api/initial-template.yml                                                                   |
+| PIPELINE_STACK_TEMPLATE | Location of the cloudformation template for the oAuth pipeline                  | file://./pipeline/pipeline.yml                                                                      |
 | PIPELINE_CONNECTION_ARN | ARN of the connection you just created as described in previous steps           | arn:aws:codestar-connections:us-west-2:474455999118:connection/ad4124a6-d454-4d0d-81e8-87dbb6aa9ed5 |
 | REPOSITORY_ID           | User and repository name (<user>/<repository>) of where the oAuth API is stored | jorgerdzf/stc-oauth                                                                                 |
 | REPOSITORY_BRANCH       | Name of the branch that pipeline will be listening to be triggered              | dev                                                                                                 |
@@ -30,10 +30,10 @@ The following script is an example to create the required stacks for a developme
 
 ```bash
 AWS_CLI_PROFILE="personal-jorge" \
-ROLE_TRUST_POLICY_FILE="file://../pipeline/policies/stc-oauth-cloudformation-trust-policy.json" \
-ROLE_POLICY_FILE="file://../pipeline/policies/stc-oauth-cloudformation-policy.json" \
-API_STACK_TEMPLATE="file://initial-template.yml" \
-PIPELINE_STACK_TEMPLATE="file://../pipeline/pipeline.yml" \
+ROLE_TRUST_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-trust-policy.json" \
+ROLE_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-policy.json" \
+API_STACK_TEMPLATE="file://./api/initial-template.yml" \
+PIPELINE_STACK_TEMPLATE="file://./pipeline/pipeline.yml" \
 PIPELINE_CONNECTION_ARN="arn:aws:codestar-connections:us-west-2:474455999118:connection/ad4124a6-d454-4d0d-81e8-87dbb6aa9ed5" \
 REPOSITORY_ID="jorgerdzf/stc-oauth" \
 REPOSITORY_BRANCH="dev" \

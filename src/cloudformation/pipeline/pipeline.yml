@@ -116,7 +116,7 @@ Resources:
         EncryptionDisabled: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: "buildspec.yaml"
+        BuildSpec: "../api/buildspec.yml"
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
         Type: LINUX_CONTAINER
