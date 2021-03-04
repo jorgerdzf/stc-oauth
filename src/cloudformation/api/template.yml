@@ -13,14 +13,6 @@ Parameters:
       - staging
       - prod
     ConstraintDescription: must be a dev, qa, staging or prod
-  STCAuthBucket:
-    Description: Location of all the necessary stack file resources
-    Type: String
-    Default: stc-oauth-dev-artifacts
-  ApiSpecFile:
-    Description: Name of the api documentation spec file
-    Type: String
-    Default: s3://stc-oauth-dev-artifacts/openapi.yml
 
 Resources:
   CloudWatchRole:
@@ -59,7 +51,7 @@ Resources:
         "Fn::Transform":
           Name: "AWS::Include"
           Parameters:
-            Location: !Ref ApiSpecFile
+            Location: !Sub s3://stc-oauth-${EnvironmentType}-artifacts/openapi.yml
       MethodSettings:
         - ResourcePath: "/*"
           HttpMethod: "*"
@@ -71,7 +63,7 @@ Resources:
   TestFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/lambda/stc-oauth/test/get
+      CodeUri: ../../lambda/test/get
       Handler: index.handler
       Runtime: nodejs12.x
       Events:
@@ -87,7 +79,7 @@ Resources:
   AuthFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/lambda/stc-oauth/auth/get
+      CodeUri: ../../lambda/auth/get
       Handler: index.handler
       Runtime: nodejs12.x
       Events:
@@ -103,7 +95,7 @@ Resources:
   TokenFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/lambda/stc-oauth/token/get
+      CodeUri: ../../lambda/token/get
       Handler: index.handler
       Runtime: nodejs12.x
       Policies: AmazonDynamoDBReadOnlyAccess
