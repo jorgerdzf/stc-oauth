@@ -44,7 +44,7 @@ create_cloudformation_stack () {
   --stack-name "stc-oauth-pipeline-${ENVIRONMENT_TYPE}" \
   --template-body "${PIPELINE_STACK_TEMPLATE}" \
   --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
-  --parameters ParameterKey="EnvironmentType",ParameterValue="${ENVIRONMENT_TYPE}" ParameterKey="PipelineConnectionArn",ParameterValue="${PIPELINE_CONNECTION_ARN}" ParameterKey="RepositoryId",ParameterValue="${REPOSITORY_ID}" ParameterKey="RepositoryBranch",ParameterValue="${REPOSITORY_BRANCH}" ParameterKey="EnvironmentType",ParameterValue="${ENVIRONMENT_TYPE}" ParameterKey="S3STCAuthBucket",ParameterValue="stc-oauth-${ENVIRONMENT_TYPE}-artifacts" \
+  --parameters ParameterKey="EnvironmentType",ParameterValue="${ENVIRONMENT_TYPE}" ParameterKey="PipelineConnectionArn",ParameterValue="${PIPELINE_CONNECTION_ARN}" ParameterKey="RepositoryId",ParameterValue="${REPOSITORY_ID}" ParameterKey="RepositoryBranch",ParameterValue="${REPOSITORY_BRANCH}" ParameterKey="EnvironmentType",ParameterValue="${ENVIRONMENT_TYPE}" ParameterKey="S3STCAuthBucket",ParameterValue="stc-oauth-${ENVIRONMENT_TYPE}-artifacts" ParameterKey="CFAPIoAuthRole",ParameterValue="$roleArn" \
   --role-arn "$roleArn" \
   --change-set-name "stc-oauth-pipeline-${ENVIRONMENT_TYPE}-changeset" \
   --change-set-type CREATE \

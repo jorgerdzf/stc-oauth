@@ -13,6 +13,9 @@ Parameters:
       - staging
       - prod
     ConstraintDescription: must be a dev, qa, staging or prod
+  S3STCAuthBucket:
+    Description: S3 Bucket to store the oAuth artifacts generated during the pipeline
+    Type: String
 
 Resources:
   CloudWatchRole:
@@ -51,7 +54,7 @@ Resources:
         "Fn::Transform":
           Name: "AWS::Include"
           Parameters:
-            Location: !Sub s3://stc-oauth-${EnvironmentType}-artifacts/openapi.yml
+            Location: !Sub s3://${S3STCAuthBucket}/openapi.yml
       MethodSettings:
         - ResourcePath: "/*"
           HttpMethod: "*"

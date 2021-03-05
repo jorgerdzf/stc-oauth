@@ -30,6 +30,9 @@ Parameters:
   S3STCAuthBucket:
     Description: S3 Bucket to store the oAuth artifacts generated during the pipeline
     Type: String
+  CFAPIoAuthRole:
+    Description: Cloudformation oAuth API role with permissions to create the required resources
+    Type: String
 
 Resources:
   CodeBuildRole:
@@ -90,6 +93,22 @@ Resources:
                 - "kms.amazonaws.com"
             Action:
               - "sts:AssumeRole"
+      Path: /
+      Policies:
+        - PolicyName: !Sub ${EnvironmentType}-stc-oauth-codepipeline-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "codestar-connections:*"
+                  - "codebuild:*"
+                  - "s3:*"
+                  - "cloudformation:*"
+                  - "cloudwatch:*"
+                  - "iam:PassRole"
+                Resource:
+                  - "*"
   PipelineBucket:
     Type: "AWS::S3::Bucket"
     Properties:
@@ -116,7 +135,7 @@ Resources:
         EncryptionDisabled: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: "../api/buildspec.yml"
+        BuildSpec: "src/cloudformation/api/buildspec.yml"
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
         Type: LINUX_CONTAINER
@@ -181,10 +200,10 @@ Resources:
               Configuration:
                 ActionMode: CHANGE_SET_REPLACE
                 Capabilities: CAPABILITY_IAM
-                RoleArn: !GetAtt CodePipeLineRole.Arn
+                RoleArn: !Ref CFAPIoAuthRole
                 TemplatePath: BuildArtifact::packaged-template.yml
-                StackName: !Sub stc-oauth-pipeline-${EnvironmentType}
-                ChangeSetName: !Sub stc-oauth-pipeline-${EnvironmentType}-changeset
+                StackName: !Sub stc-oauth-api-${EnvironmentType}
+                ChangeSetName: !Sub stc-oauth-api-${EnvironmentType}-changeset
                 OutputFileName: api-stack-outputs.json
                 ParameterOverrides: !Sub |
                   {
@@ -205,7 +224,7 @@ Resources:
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
                 Capabilities: CAPABILITY_IAM
-                RoleArn: !GetAtt CodePipeLineRole.Arn
-                StackName: !Sub stc-oauth-pipeline-${EnvironmentType}
-                ChangeSetName: !Sub stc-oauth-pipeline-${EnvironmentType}-changeset
+                RoleArn: !Ref CFAPIoAuthRole
+                StackName: !Sub stc-oauth-api-${EnvironmentType}
+                ChangeSetName: !Sub stc-oauth-api-${EnvironmentType}-changeset
               RunOrder: 2
