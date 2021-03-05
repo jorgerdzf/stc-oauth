@@ -28,6 +28,8 @@ The PIPELINE_CONNECTION_ARN is the arn of the connection you just created.
 
 The following script is an example to create the required stacks for a development envirnoment.
 
+## Development Environment Script
+
 ```bash
 AWS_CLI_PROFILE="personal-jorge" \
 ROLE_TRUST_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-trust-policy.json" \
@@ -38,5 +40,50 @@ PIPELINE_CONNECTION_ARN="arn:aws:codestar-connections:us-west-2:474455999118:con
 REPOSITORY_ID="jorgerdzf/stc-oauth" \
 REPOSITORY_BRANCH="dev" \
 ENVIRONMENT_TYPE="dev" \
+./create-oauth-stack.sh
+```
+
+## QA Environment Script
+
+```bash
+AWS_CLI_PROFILE="personal-jorge" \
+ROLE_TRUST_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-trust-policy.json" \
+ROLE_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-policy.json" \
+API_STACK_TEMPLATE="file://./api/initial-template.yml" \
+PIPELINE_STACK_TEMPLATE="file://./pipeline/pipeline.yml" \
+PIPELINE_CONNECTION_ARN="arn:aws:codestar-connections:us-west-2:474455999118:connection/4b0f8c65-5c27-459c-9477-bb87f7bb0114" \
+REPOSITORY_ID="jorgerdzf/stc-oauth" \
+REPOSITORY_BRANCH="qa" \
+ENVIRONMENT_TYPE="qa" \
+./create-oauth-stack.sh
+```
+
+## Staging Environment Script
+
+```bash
+AWS_CLI_PROFILE="personal-jorge" \
+ROLE_TRUST_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-trust-policy.json" \
+ROLE_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-policy.json" \
+API_STACK_TEMPLATE="file://./api/initial-template.yml" \
+PIPELINE_STACK_TEMPLATE="file://./pipeline/pipeline.yml" \
+PIPELINE_CONNECTION_ARN="arn:aws:codestar-connections:us-west-2:474455999118:connection/4b0f8c65-5c27-459c-9477-bb87f7bb0114" \
+REPOSITORY_ID="jorgerdzf/stc-oauth" \
+REPOSITORY_BRANCH="staging" \
+ENVIRONMENT_TYPE="staging" \
+./create-oauth-stack.sh
+```
+
+## Production Environment Script
+
+```bash
+AWS_CLI_PROFILE="personal-jorge" \
+ROLE_TRUST_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-trust-policy.json" \
+ROLE_POLICY_FILE="file://./pipeline/policies/stc-oauth-cloudformation-policy.json" \
+API_STACK_TEMPLATE="file://./api/initial-template.yml" \
+PIPELINE_STACK_TEMPLATE="file://./pipeline/pipeline.yml" \
+PIPELINE_CONNECTION_ARN="arn:aws:codestar-connections:us-west-2:474455999118:connection/4b0f8c65-5c27-459c-9477-bb87f7bb0114" \
+REPOSITORY_ID="jorgerdzf/stc-oauth" \
+REPOSITORY_BRANCH="prod" \
+ENVIRONMENT_TYPE="prod" \
 ./create-oauth-stack.sh
 ```
