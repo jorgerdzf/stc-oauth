@@ -83,7 +83,7 @@ API_STACK_TEMPLATE="file://./api/initial-template.yml" \
 PIPELINE_STACK_TEMPLATE="file://./pipeline/pipeline.yml" \
 PIPELINE_CONNECTION_ARN="arn:aws:codestar-connections:us-west-2:474455999118:connection/4b0f8c65-5c27-459c-9477-bb87f7bb0114" \
 REPOSITORY_ID="jorgerdzf/stc-oauth" \
-REPOSITORY_BRANCH="prod" \
+REPOSITORY_BRANCH="master" \
 ENVIRONMENT_TYPE="prod" \
 ./create-oauth-stack.sh
 ```
