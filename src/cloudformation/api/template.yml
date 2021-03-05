@@ -115,7 +115,7 @@ Resources:
   TokenTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: Token
+      TableName: !Sub ${EnvironmentType}-Token
       AttributeDefinitions:
         - AttributeName: Token
           AttributeType: S
