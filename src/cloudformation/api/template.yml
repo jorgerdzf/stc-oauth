@@ -86,7 +86,7 @@ Resources:
       Handler: index.handler
       Runtime: nodejs12.x
       Events:
-        Test:
+        Auth:
           Type: Api
           Properties:
             Path: /auth
@@ -101,9 +101,8 @@ Resources:
       CodeUri: ../../lambda/token/get
       Handler: index.handler
       Runtime: nodejs12.x
-      Policies: AmazonDynamoDBReadOnlyAccess
       Events:
-        GetUserByCognitoID:
+        Token:
           Type: Api
           Properties:
             Path: /token
